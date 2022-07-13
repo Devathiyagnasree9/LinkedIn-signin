@@ -1,41 +1,28 @@
+linkedin=Sign_in.new
 Given(/^I am on welcome home page$/) do
-  $driver.get "https://in.linkedin.com"
+  linkedin.linkedin_url
 end
-
 When(/^I click on sign in button$/) do
-  $driver.find_element(:class, "nav__button-secondary").click()
+  linkedin.sign_in_button
 end
 
-Then(/^I should see Sign in page with email\/password fields$/) do
-  heading=$driver.find_element(:class, "header__content__heading").text()
-  if(heading=="Sign in")
-    puts("Sign in page is launched")
-  else
-    puts("Sign in page is Not launched")
-  end
+Then("I should see Sign in page") do
+  puts(linkedin.sign_in_page_heading)
+
 end
 
 Given(/^I am on Sign in page$/) do
-  $driver.get "https://www.linkedin.com/login?fromSignIn=true&trk=guest_homepage-basic_nav-header-signin"
+  linkedin.sign_in_page
 end
 
 When(/^I enter (.*) and (.*)$/) do |emailorphone, password|
-  email=$driver.find_element(:id , "username")
-  pass=$driver.find_element(:id , 'password')
-  email.send_keys(emailorphone)
-  pass.send_keys(password)
+  linkedin.credentials(emailorphone,password)
 end
 
 And(/^click on sign in button$/) do
-  $driver.find_element(:class, "login__form_action_container").click()
+  linkedin.login_button
 end
 
 Then(/^I should be able to Sign in$/) do
-  current_url=$driver.current_url
-  successfull_signin_url ="https://www.linkedin.com/feed/?trk=guest_homepage-basic_nav-header-signin"
-  if(current_url==successfull_signin_url)
-    puts("User signed in to LinkedIn successfully")
-  else
-    puts("Enter correct email/phone and password details to sign in ")
-  end
+  linkedin.sign_in_status
 end
